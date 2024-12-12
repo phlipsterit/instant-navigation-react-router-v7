@@ -1,5 +1,5 @@
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
+import { getPokedexEntries } from "~/pokemonClient.server";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -8,10 +8,26 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-export function loader({ context }: Route.LoaderArgs) {
-  return { message: context.VALUE_FROM_EXPRESS };
+export function headers() {
+  return {
+    "cache-control": "public, max-age=3600",
+  };
 }
 
+export async function loader() {
+  const pokemonEntries = await getPokedexEntries();
+  console.log("pokemon", pokemonEntries);
+  return { pokemonEntries };
+}
+
+export function Welcome() {}
+
 export default function Home({ loaderData }: Route.ComponentProps) {
-  return <Welcome message={loaderData.message} />;
+  return (
+    <main>
+      {loaderData.pokemonEntries.map((entry) => (
+        <div key={entry.entry_number}>{entry.pokemon_species.name}</div>
+      ))}
+    </main>
+  );
 }
