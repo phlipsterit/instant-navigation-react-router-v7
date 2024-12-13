@@ -1,3 +1,4 @@
+import { Card } from "~/components/Card";
 import type { Route } from "./+types/home";
 import { getPokedexEntries } from "~/pokemonClient.server";
 
@@ -26,7 +27,12 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   return (
     <main>
       {loaderData.pokemonEntries.map((entry) => (
-        <div key={entry.entry_number}>{entry.pokemon_species.name}</div>
+        <Card
+          key={entry.pokedexNumber}
+          title={entry.name}
+          imageUrl={entry.imageUrl}
+          body={"# " + entry.pokedexNumber}
+        />
       ))}
     </main>
   );
