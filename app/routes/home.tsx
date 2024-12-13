@@ -25,7 +25,7 @@ export function Welcome() {}
 
 export default function Home({ loaderData }: Route.ComponentProps) {
   return (
-    <main>
+    <main className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
       {loaderData.pokemonEntries.map((entry) => (
         <Card
           key={entry.pokedexNumber}
