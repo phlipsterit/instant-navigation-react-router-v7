@@ -15,13 +15,18 @@ export function headers() {
   };
 }
 
-export async function loader({ request, params }: Route.LoaderArgs) {
+export async function loader({ params }: Route.LoaderArgs) {
   const pokemonId = params["id"];
   const pokemon = await getPokemon(pokemonId);
-  return { pokemon };
+  return { serverData: pokemon };
+}
+
+export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
+  const serverData = await serverLoader();
+  return serverData;
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-  const { pokemon } = loaderData;
-  return <PokemonPage pokemon={pokemon} />;
+  const { serverData } = loaderData;
+  return <PokemonPage pokemon={serverData} />;
 }
