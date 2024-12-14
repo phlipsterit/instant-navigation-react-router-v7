@@ -2,6 +2,7 @@ import { Card } from "~/components/Card";
 import type { Route } from "./+types/home";
 import { getPokedexEntries } from "~/pokemonClient.server";
 import { Link } from "react-router";
+import { clientLoaderContext } from "~/clientLoaderContext";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -25,12 +26,18 @@ export async function loader({ request }: Route.LoaderArgs) {
 export default function Home({ loaderData }: Route.ComponentProps) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-      {loaderData.pokemonEntries.map((entry) => (
-        <Link key={entry.id} to={`pokemon/${entry.id}`}>
+      {loaderData.pokemonEntries.map((pokemonBaseInfo) => (
+        <Link
+          key={pokemonBaseInfo.id}
+          to={`pokemon/${pokemonBaseInfo.id}`}
+          onClick={() => {
+            clientLoaderContext.set(pokemonBaseInfo.id, pokemonBaseInfo);
+          }}
+        >
           <Card
-            title={entry.name}
-            imageUrl={entry.imageUrl}
-            body={"# " + entry.id}
+            title={pokemonBaseInfo.name}
+            imageUrl={pokemonBaseInfo.imageUrl}
+            body={"# " + pokemonBaseInfo.id}
           />
         </Link>
       ))}

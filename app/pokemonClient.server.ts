@@ -44,7 +44,6 @@ export const getPokedexEntries = async (pokedexId: string): Promise<PokemonBaseI
 export const getPokemon = async (id: string): Promise<PokemonInfo> => {
   const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
   const pokemon = await response.json() as Pokemon
-  console.log('pokemon', pokemon);
   return {
     id,
     name: pokemon.name,

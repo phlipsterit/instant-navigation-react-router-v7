@@ -1,8 +1,8 @@
 import { Fragment } from "react";
-import { PokemonInfo } from "~/types";
+import { PokemonDynamicInfo } from "~/types";
 
 export type PokemonPageProps = {
-  pokemon: PokemonInfo;
+  pokemon: PokemonDynamicInfo;
 };
 export const PokemonPage = ({ pokemon }: PokemonPageProps) => {
   const { name, imageUrl, id, height, weight, stats } = pokemon;
@@ -14,17 +14,21 @@ export const PokemonPage = ({ pokemon }: PokemonPageProps) => {
 
       <h1 className="text-3xl my-2 capitalize font-bold">{name}</h1>
       <p className="my-2"># {id}</p>
-      <p>Height: {height}</p>
-      <p>Weight: {weight}</p>
-      <h2 className="my-2 mt-4 text-xl">Stats:</h2>
-      <div className=" grid grid-cols-2 gap-2 gap-x-4">
-        {stats.map((stat) => (
-          <Fragment key={stat.name}>
-            <div className="text-right capitalize">{stat.name}</div>
-            <div className="text-left">{stat.value}</div>
-          </Fragment>
-        ))}
-      </div>
+      {stats && (
+        <>
+          <p>Height: {height}</p>
+          <p>Weight: {weight}</p>
+          <h2 className="my-2 mt-4 text-xl">Stats:</h2>
+          <div className=" grid grid-cols-2 gap-2 gap-x-4">
+            {stats.map((stat) => (
+              <Fragment key={stat.name}>
+                <div className="text-right capitalize">{stat.name}</div>
+                <div className="text-left">{stat.value}</div>
+              </Fragment>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };

@@ -10,3 +10,11 @@ export type PokemonInfo = PokemonBaseInfo & {
   weight: number,
   stats: {name: string, value: number}[];
 }
+
+export type PokemonDynamicInfo = 
+| PokemonInfo
+| (PokemonBaseInfo & {
+    height?: undefined;
+    weight?: undefined;
+    stats?: undefined;
+  });
