@@ -5,10 +5,12 @@ import { clientLoaderContext } from "~/clientLoaderContext";
 import { PokemonBaseInfo, PokemonDynamicInfo, PokemonInfo } from "~/types";
 import { useEffect, useState } from "react";
 
+const getMetaTitle = (pokemon: PokemonDynamicInfo): string =>
+  pokemon.name +
+  (pokemon.weight !== undefined ? ` - ${pokemon.weight} kg` : "");
+
 export function meta({ data }: Route.MetaArgs) {
-  const pokemon =
-    "pokemonInfo" in data ? data.pokemonInfo : data.pokemonBaseInfo;
-  return [{ title: pokemon.name }];
+  return [{ title: getMetaTitle(data.pokemon) }];
 }
 
 export function headers() {
@@ -17,50 +19,42 @@ export function headers() {
   };
 }
 
-export async function loader({ params }: Route.LoaderArgs) {
-  const pokemonId = params["id"];
-  const pokemon = await getPokemon(pokemonId);
-  return { pokemonInfo: pokemon };
+export async function loader({ params: { id } }: Route.LoaderArgs) {
+  return { pokemon: await getPokemon(id) };
 }
 
 export async function clientLoader({
-  params,
+  params: { id },
   serverLoader,
 }: Route.ClientLoaderArgs) {
-  const { id } = params;
   const pokemonBaseInfo = clientLoaderContext.get<PokemonBaseInfo>(id);
   if (pokemonBaseInfo) {
     return {
-      pokemonBaseInfo,
+      pokemon: pokemonBaseInfo,
       serverLoaderPromise: serverLoader(),
     };
   }
-  const serverData = await serverLoader();
-  return serverData;
+  return await serverLoader();
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
   const [pokemon, setPokemon] = useState<PokemonDynamicInfo>(
-    "pokemonInfo" in loaderData
-      ? loaderData.pokemonInfo
-      : loaderData.pokemonBaseInfo
+    loaderData.pokemon
   );
 
   useEffect(() => {
     if ("serverLoaderPromise" in loaderData) {
       const getFromServer = async () => {
         const serverData = await loaderData.serverLoaderPromise;
-        setPokemon(serverData.pokemonInfo);
+        setPokemon(serverData.pokemon);
       };
       getFromServer();
     }
   }, []);
+
   return (
     <>
-      <title>
-        {pokemon.name +
-          (pokemon.weight !== undefined ? ` - ${pokemon.weight} kg` : "")}
-      </title>
+      <title>{getMetaTitle(pokemon)}</title>
       <PokemonPage pokemon={pokemon} />
     </>
   );
