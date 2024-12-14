@@ -1,11 +1,12 @@
 import { Card } from "~/components/Card";
 import type { Route } from "./+types/home";
 import { getPokedexEntries } from "~/pokemonClient.server";
+import { Link } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Pokedex app" },
+    { name: "description", content: "App for showing all pokemons" },
   ];
 }
 
@@ -15,25 +16,24 @@ export function headers() {
   };
 }
 
-export async function loader() {
-  const pokemonEntries = await getPokedexEntries();
-  console.log("pokemon", pokemonEntries);
+export async function loader({ request }: Route.LoaderArgs) {
+  const pokedexId = new URL(request.url).searchParams.get("pokedexId") || "2";
+  const pokemonEntries = await getPokedexEntries(pokedexId);
   return { pokemonEntries };
 }
 
-export function Welcome() {}
-
 export default function Home({ loaderData }: Route.ComponentProps) {
   return (
-    <main className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
       {loaderData.pokemonEntries.map((entry) => (
-        <Card
-          key={entry.pokedexNumber}
-          title={entry.name}
-          imageUrl={entry.imageUrl}
-          body={"# " + entry.pokedexNumber}
-        />
+        <Link key={entry.id} to={`pokemon/${entry.id}`}>
+          <Card
+            title={entry.name}
+            imageUrl={entry.imageUrl}
+            body={"# " + entry.id}
+          />
+        </Link>
       ))}
-    </main>
+    </div>
   );
 }
