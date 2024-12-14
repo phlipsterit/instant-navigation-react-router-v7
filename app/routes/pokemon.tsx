@@ -47,20 +47,19 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   );
 
   useEffect(() => {
-    if ("pokemonInfo" in loaderData) {
-      return;
+    if ("serverLoaderPromise" in loaderData) {
+      const getFromServer = async () => {
+        const serverData = await loaderData.serverLoaderPromise;
+        setPokemon(serverData.pokemonInfo);
+      };
+      getFromServer();
     }
-    const getFromServer = async () => {
-      const serverData = await loaderData.serverLoaderPromise;
-      setPokemon(serverData.pokemonInfo);
-    };
-    getFromServer();
   }, []);
   return (
     <>
       <title>
         {pokemon.name +
-          (pokemon.weight !== undefined ? " - " + pokemon.weight + " kg" : "")}
+          (pokemon.weight !== undefined ? ` - ${pokemon.weight} kg` : "")}
       </title>
       <PokemonPage pokemon={pokemon} />
     </>
