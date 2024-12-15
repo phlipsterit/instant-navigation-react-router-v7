@@ -1,5 +1,8 @@
 import type { PokemonBaseInfo, PokemonInfo } from "~/types"
 
+/** utility function to get data from the pokemon api */
+
+/** Types matching the pokemon api */
 type PokemonEntry = {
   pokemon_species: {
     name: string,
@@ -24,7 +27,7 @@ type Pokemon = {
   }[]
 };
 
-export const getPokedexEntries = async (pokedexId: string): Promise<PokemonBaseInfo[]> => {
+export const getPokemonList = async (pokedexId: string): Promise<PokemonBaseInfo[]> => {
   const response = await fetch("https://pokeapi.co/api/v2/pokedex/" + pokedexId);
   const data = await response.json() as Pokedex
   return data.pokemon_entries.map(entry => {

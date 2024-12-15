@@ -18,12 +18,11 @@ export const Card = ({
           ? { viewTransitionName: title + "-frame" }
           : undefined
       }
-      className="flex flex-col items-center max-w-sm bg-slate-200 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+      className="flex pb-5 flex-col items-center max-w-sm bg-slate-200 border border-gray-300 rounded-2xl shadow"
     >
       <img
         height="200px"
         width="200px"
-        className="rounded-t-lg"
         src={imageUrl}
         alt={title}
         style={
@@ -32,30 +31,26 @@ export const Card = ({
             : undefined
         }
       />
-      <div className="p-5">
-        <div className="mb-2 capitalize text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-          <span
-            style={
-              enableViewTransition
-                ? { viewTransitionName: title + "-title" }
-                : undefined
-            }
-          >
-            {title}
-          </span>
-        </div>
-        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400 text-center">
-          <span
-            style={
-              enableViewTransition
-                ? { viewTransitionName: title + "-body" }
-                : undefined
-            }
-          >
-            {body}
-          </span>
-        </p>
-      </div>
+      <span
+        className="mb-2 capitalize text-2xl font-bold tracking-tight text-gray-900"
+        style={
+          enableViewTransition
+            ? { viewTransitionName: title + "-title" }
+            : undefined
+        }
+      >
+        {title}
+      </span>
+      <span
+        className="text-gray-700"
+        style={
+          enableViewTransition
+            ? { viewTransitionName: title + "-body" }
+            : undefined
+        }
+      >
+        {body}
+      </span>
     </div>
   );
 };
