@@ -1,8 +1,9 @@
 import { Card } from "~/components/Card";
 import type { Route } from "./+types/home";
 import { getPokedexEntries } from "~/pokemonClient.server";
-import { Link } from "react-router";
+import { Link, useViewTransitionState } from "react-router";
 import { clientLoaderContext } from "~/clientLoaderContext";
+import { PokemonBaseInfo } from "~/types";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -27,20 +28,33 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
       {loaderData.pokemonEntries.map((pokemonBaseInfo) => (
-        <Link
-          key={pokemonBaseInfo.id}
-          to={`pokemon/${pokemonBaseInfo.id}`}
-          onClick={() => {
-            clientLoaderContext.set(pokemonBaseInfo.id, pokemonBaseInfo);
-          }}
-        >
-          <Card
-            title={pokemonBaseInfo.name}
-            imageUrl={pokemonBaseInfo.imageUrl}
-            body={"# " + pokemonBaseInfo.id}
-          />
-        </Link>
+        <CardLink key={pokemonBaseInfo.id} pokemonBaseInfo={pokemonBaseInfo} />
       ))}
     </div>
   );
 }
+
+const CardLink = ({
+  pokemonBaseInfo,
+}: {
+  pokemonBaseInfo: PokemonBaseInfo;
+}) => {
+  const to = `pokemon/${pokemonBaseInfo.id}`;
+  const isTransitioning = useViewTransitionState(to);
+  return (
+    <Link
+      to={to}
+      viewTransition
+      onClick={() => {
+        clientLoaderContext.set(pokemonBaseInfo.id, pokemonBaseInfo);
+      }}
+    >
+      <Card
+        title={pokemonBaseInfo.name}
+        enableViewTransition={isTransitioning}
+        imageUrl={pokemonBaseInfo.imageUrl}
+        body={"# " + pokemonBaseInfo.id}
+      />
+    </Link>
+  );
+};
