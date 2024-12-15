@@ -13,3 +13,4 @@ The main idea is to show what we already have on the previous page and load the 
  - Instant navigation. The data-fetching is started in the client loader, so it's initated as soon as possible and before the first render of the component
  - Meta tags are updated client side after the navigation when all data is available.
 
+See demo at [https://youtu.be/3xcTErMk5dI](https://youtu.be/3xcTErMk5dI)
