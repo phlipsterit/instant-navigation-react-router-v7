@@ -7,24 +7,16 @@ export type PokemonPageProps = {
 export const PokemonPage = ({ pokemon }: PokemonPageProps) => {
   const { name, imageUrl, id, height, weight, stats } = pokemon;
   return (
-    <div
-      className="text-center bg-slate-200 pb-10 rounded-md"
-      style={{ viewTransitionName: name + "-frame" }}
-    >
+    <div className="text-center bg-slate-200 pb-10 rounded-md">
       <div className="flex justify-center">
-        <img
-          className="aspect-square w-[400px]"
-          src={imageUrl}
-          alt={name}
-          style={{ viewTransitionName: name + "-image" }}
-        />
+        <img className="aspect-square w-[400px]" src={imageUrl} alt={name} />
       </div>
 
       <h1 className="text-3xl my-2 capitalize font-bold">
-        <span style={{ viewTransitionName: name + "-title" }}>{name}</span>
+        <span>{name}</span>
       </h1>
       <p className="my-2">
-        <span style={{ viewTransitionName: name + "-body" }}># {id}</span>
+        <span># {id}</span>
       </p>
       {stats ? (
         <>

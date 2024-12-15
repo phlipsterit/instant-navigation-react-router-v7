@@ -1,7 +1,7 @@
 import { Card } from "~/components/Card";
 import type { Route } from "./+types/home";
 import { getPokemonList } from "~/pokemonClient.server";
-import { Link, useViewTransitionState } from "react-router";
+import { Link } from "react-router";
 import { clientLoaderContext } from "~/clientLoaderContext";
 import { PokemonBaseInfo } from "~/types";
 
@@ -39,11 +39,9 @@ type CardLinkProps = {
 };
 const CardLink = ({ pokemonBaseInfo }: CardLinkProps) => {
   const to = `pokemon/${pokemonBaseInfo.id}`;
-  const isTransitioning = useViewTransitionState(to);
   return (
     <Link
       to={to}
-      viewTransition
       // when the card is clicked, we add the data to the client context so it can be accessed in the clientLoader of the pokemon-page
       onClick={() => {
         clientLoaderContext.set(pokemonBaseInfo.id, pokemonBaseInfo);
@@ -51,7 +49,6 @@ const CardLink = ({ pokemonBaseInfo }: CardLinkProps) => {
     >
       <Card
         title={pokemonBaseInfo.name}
-        enableViewTransition={isTransitioning}
         imageUrl={pokemonBaseInfo.imageUrl}
         body={"# " + pokemonBaseInfo.id}
       />
